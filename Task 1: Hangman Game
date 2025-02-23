@@ -1,0 +1,53 @@
+import random
+
+def display_board(hidden_word, incorrect_guesses, attempts_left):
+    print(f"Word: {' '.join(hidden_word)}")
+    print(f"Incorrect guesses: {', '.join(incorrect_guesses)}")
+    print(f"Attempts left: {attempts_left}")
+    print("\n")
+
+def choose_word():
+    words = ["python", "hangman", "programming", "developer", "code", "function", "algorithm"]
+    return random.choice(words)
+
+def play_game():
+    print("Welcome to Hangman!")
+    
+    word_to_guess = choose_word()
+    word_length = len(word_to_guess)
+    hidden_word = ["_"] * word_length
+    incorrect_guesses = []
+    attempts_left = 6
+    
+    while attempts_left > 0:
+        display_board(hidden_word, incorrect_guesses, attempts_left)
+        
+        guess = input("Guess a letter: ").lower()
+
+        if guess in incorrect_guesses or guess in hidden_word:
+            print("You already guessed that letter, try again.")
+            continue
+
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter a valid letter.")
+            continue
+        
+        if guess in word_to_guess:
+            for index in range(word_length):
+                if word_to_guess[index] == guess:
+                    hidden_word[index] = guess
+            print(f"Good guess: {guess}")
+        else:
+            incorrect_guesses.append(guess)
+            attempts_left -= 1
+            print(f"Oops! {guess} is not in the word.")
+        
+        if "_" not in hidden_word:
+            display_board(hidden_word, incorrect_guesses, attempts_left)
+            print("Congratulations! You've guessed the word.")
+            break
+    else:
+        print(f"Game Over! The word was: {word_to_guess}")
+
+if __name__ == "__main__":
+    play_game()
